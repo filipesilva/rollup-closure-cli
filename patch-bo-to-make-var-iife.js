@@ -23,4 +23,4 @@
 // By editing `node_modules/@angular-devkit/build-optimizer/src/transforms/wrap-enums.js` and removing `, ts.NodeFlags.Let`, a `var` declaration will be
 // used instead, which doesn't seem to bother GCC much.
 const execSync = require('child_process').execSync;
-execSync(`sed -i 's/, ts\.NodeFlags\.Let//g' node_modules/@angular-devkit/build-optimizer/src/transforms/wrap-enums.js`)
+execSync(`sed -i '.bak' 's/, ts\.NodeFlags\.Let//g' node_modules/@angular-devkit/build-optimizer/src/transforms/wrap-enums.js`)

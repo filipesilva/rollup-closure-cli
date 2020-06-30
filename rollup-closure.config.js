@@ -20,7 +20,7 @@ const closureConfig = {
 };
 
 // Use terser only to add the global defines.
-const globalDefUglifyConfig = {
+const globalDefTerserConfig = {
   mangle: false,
   compress: {
     defaults: false,
@@ -53,7 +53,7 @@ export default {
         `node_modules/rxjs/`,
       ]
     }),
-    terser(globalDefUglifyConfig),
+    terser(globalDefTerserConfig),
     compiler(closureConfig)
   ]
 };
