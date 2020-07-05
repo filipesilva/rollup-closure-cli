@@ -21,7 +21,7 @@ const cliTerserConfig = {
 }
 
 export default {
-  input: './out-tsc/app/main-rollup.js',
+  input: './out-tsc/app/main-aot.js',
   output: {
     dir: './dist-rollup-terser/',
     format: 'esm',

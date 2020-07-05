@@ -1,7 +1,6 @@
 {
   "extends": "./tsconfig.app.json",
   "files": [
-    "src/main-rollup.ts",
-    "src/polyfills.ts"
+    "src/main-aot.ts"
   ]
 }
