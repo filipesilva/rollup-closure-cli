@@ -33,7 +33,7 @@ const globalDefTerserConfig = {
 
 
 export default {
-  input: './out-tsc/app/main-rollup.js',
+  input: './out-tsc/app/main-aot.js',
   output: {
     dir: './dist-rollup-closure/',
     format: 'esm',
