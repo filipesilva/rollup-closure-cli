@@ -1,8 +1,9 @@
+import path from "path";
 import nodeResolve from '@rollup/plugin-node-resolve';
 import buildOptimizer from '@angular-devkit/build-optimizer/src/build-optimizer/rollup-plugin.js';
 import compiler from '@ampproject/rollup-plugin-closure-compiler';
-import { terser } from 'rollup-plugin-terser';
-import { GLOBAL_DEFS_FOR_TERSER, GLOBAL_DEFS_FOR_TERSER_WITH_AOT } from '@angular/compiler-cli';
+import inject from '@rollup/plugin-inject';
+import replace from '@rollup/plugin-replace';
 
 const closureConfig = {
   charset: 'UTF-8',
@@ -19,19 +20,6 @@ const closureConfig = {
   externs: ['./externs.js'],
 };
 
-// Use terser only to add the global defines.
-const globalDefTerserConfig = {
-  mangle: false,
-  compress: {
-    defaults: false,
-    global_defs: {
-      ...GLOBAL_DEFS_FOR_TERSER,
-      ...GLOBAL_DEFS_FOR_TERSER_WITH_AOT,
-    },
-  },
-}
-
-
 export default {
   input: './out-tsc/app/main-rollup.js',
   output: {
@@ -43,6 +31,17 @@ export default {
   treeshake: true,
   plugins: [
     nodeResolve({ mainFields: ['es2015', 'browser', 'module', 'main'] }),
+    inject({
+      ngDevMode: [path.resolve('./angular-build-constants.js'), 'ngDevMode'],
+      ngJitMode: [path.resolve('./angular-build-constants.js'), 'ngJitMode'],
+      ngI18nClosureMode: [path.resolve('./angular-build-constants.js'), 'ngI18nClosureMode']
+    }),
+    // workaround JSC_BLOCK_SCOPED_DECL_MULTIPLY_DECLARED_ERROR closure buggy isolation of variables
+    // declared in ES Modules https://github.com/ampproject/rollup-plugin-closure-compiler/issues/92
+    replace({
+      Console: 'Console_',
+      Location: 'Location_',
+    }),
     buildOptimizer({
       sideEffectFreeModules: [
         `node_modules/@angular/core/`,
@@ -53,7 +52,6 @@ export default {
         `node_modules/rxjs/`,
       ]
     }),
-    terser(globalDefTerserConfig),
     compiler(closureConfig)
   ]
 };
