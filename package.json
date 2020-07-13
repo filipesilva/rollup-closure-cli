@@ -5,13 +5,14 @@
     "build-all": "yarn clean && yarn cli && yarn rollup-ngc && yarn rollup-terser && yarn rollup-closure && yarn cli-rollup && yarn report",
     "report": "echo '\n------ Angular CLI (webpack + terser) -------'; du -sh dist-cli/*.js | sort -h -r;   echo '\n------ rollup + terser -------'; du -sh dist-rollup-terser/*.js | sort -h -r;   echo '\n------ rollup + closure compiler -------'; du -sh dist-rollup-closure/*.js | sort -h -r;   echo '\n------ Angular CLI++ (experimentalRollupPass + @ampproject/rollup-plugin-closure-compiler) -------'; du -sh dist-cli-rollup/*.js | sort -h -r;",
     "test-ngdevmode": "node check-output-for-ngdevmode.js",
-    "postinstall": "ngcc --properties es2015 browser module main --first-only",
+    "ngc": "ngc -p tsconfig.app.rollup.json",
+    "ngcc": "ngcc --properties es2015 browser module main --first-only",
+    "postinstall": "yarn ngcc && yarn ngc",
     "//build-scripts": "",
     "clean": "yarn rimraf out-tsc/ dist*/*.js dist*/*.js.map",
     "cli": "ng build --prod",
     "precli-rollup": "node patch-cli-to-use-rollup-closure.js",
     "cli-rollup": "ng build --configuration=production,rollup",
-    "rollup-ngc": "ngc -p tsconfig.app.rollup.json",
     "rollup-terser": "rollup -c rollup-terser.config.js",
     "prerollup-closure": "node patch-bo-to-make-var-iife.js",
     "rollup-closure": "rollup -c rollup-closure.config.js",
@@ -22,7 +23,7 @@
     "e2e-cli-rollup": "run-p -r \"serve ./dist-cli-rollup\" e2e",
     "e2e-rollup-terser": "run-p -r \"serve ./dist-rollup-terser\" e2e",
     "e2e-rollup-closure": "run-p -r \"serve ./dist-rollup-closure\" e2e",
-    "full-closure": "yarn rollup-ngc && yarn rollup-closure && yarn e2e-rollup-closure"
+    "full-closure": "yarn rollup-closure && yarn e2e-rollup-closure"
   },
   "private": true,
   "dependencies": {
